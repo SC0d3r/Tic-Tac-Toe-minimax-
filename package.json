@@ -1,0 +1,10 @@
+{
+  "name": "tic-tac-toe",
+  "version": "1.0.0",
+  "description": "tic tac toe game with minmax algorithm",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": ["game","ai","minmax","tic-tac-toe"],
+  "author": "SC0d3r",
+  "license": "MIT"
+}
