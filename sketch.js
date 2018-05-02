@@ -1,3 +1,5 @@
+// hasHumanWon , hasAIWon and isATie functions come from minmax.js file
+
 const topPadding = 0;
 let isPlayersTurn = true;
 const humanPlayer = 'O';
