@@ -1,28 +1,34 @@
-function hasAIWon(state) {
-  const aiStates = state.map(cell => {
-    if (cell === aiPlayer) return 'w';
-    return '-';
+function turnCurrentStateInto(state, player) {
+  return state.map(cell => {
+    if (cell === player)
+      return 'w'; // w => "player's states"
+    return '-';// - => "don't care states"
   });
-  const equalStates = winingRegExp => winingRegExp.test(aiStates.join(''));
-  return winingStates().some(equalStates);
+}
 
+function isAWiningState(playerState) {
+  const equalStates = winingRegExp => winingRegExp.test(playerState.join(''));
+  return winingStates().some(equalStates);
+}
+
+function hasAIWon(state) {
+  const aiStates = turnCurrentStateInto(state, aiPlayer);
+  return isAWiningState(aiStates);
 }
 function hasHumanWon(state) {
-  const humanStates = state.map(cell => {
-    if (cell === humanPlayer) return 'w';
-    return '-';
-  });
-  const equalStates = winingRegExp => winingRegExp.test(humanStates.join(''));
-  return winingStates().some(equalStates);
+  const humanStates = turnCurrentStateInto(state, humanPlayer);
+  return isAWiningState(humanStates);
 }
-function isTie(actions) {
+function isATie(actions) {
   return actions.length === 0;
 }
+
+
 function max_val(state) {
   const actions = emptyCells(state);
   if (hasHumanWon(state)) return -1;
   if (hasAIWon(state)) return 1;
-  if (isTie(actions)) return 0;
+  if (isATie(actions)) return 0;
 
   let value = Number.MIN_SAFE_INTEGER;
   for (let action of actions) {
@@ -33,11 +39,12 @@ function max_val(state) {
   }
   return value;
 }
+
 function min_val(state) {
   const actions = emptyCells(state);
   if (hasHumanWon(state)) return -1;
   if (hasAIWon(state)) return 1;
-  if (isTie(actions)) return 0;
+  if (isATie(actions)) return 0;
 
 
   let value = Number.MAX_SAFE_INTEGER;
@@ -49,18 +56,7 @@ function min_val(state) {
   }
   return value;
 }
-function maxActionValue(actionValue) {
-  let max = null;
-  let maxVal = Number.MIN_SAFE_INTEGER;
-  let maxKey = null;
-  for (let [k, v] of Object.entries(actionValue)) {
-    if (v > maxVal) {
-      maxVal = v;
-      maxKey = k;
-    }
-  }
-  return maxKey;
-}
+
 function minmax() {
   const actions = emptyCells(board.state());// actions = cell indexes
   const actionValue = {};
@@ -75,27 +71,39 @@ function minmax() {
   return bestMove;
 }
 
-function emptyCells(state) {
-  const onlyTruthy = x =>
-    x !== undefined && x !== null && !isNaN(x) && x !== '' && x !== false;
-  return state.map((cell, i) => {
-    if (cell !== aiPlayer && cell !== humanPlayer)
-      return i;
-  }).filter(onlyTruthy);
+function maxActionValue(actionValue) {
+  let max = null;
+  let maxVal = Number.MIN_SAFE_INTEGER;
+  let maxKey = null;
+  for (let [k, v] of Object.entries(actionValue)) {
+    if (v > maxVal) {
+      maxVal = v;
+      maxKey = k;
+    }
+  }
+  return maxKey;
 }
+
+function emptyCells(state) {
+  const withoutUndefined = x => x !== undefined;
+  return state.map((cell, i) => {
+    if (cell === null) return i;
+  }).filter(withoutUndefined);
+}
+
 function winingStates() {
   const winingRegExp = [
-    // row wining match
+    // row wining matches
     /^[-w]{3}w{3}[-w]{3}$/,
     /^w{3}[-w]{6}$/,
     /^[-w]{6}w{3}$/,
 
-    // col win match
+    // col wining matches
     /^w{1}[-w]{2}w{1}[-w]{2}w{1}[-w]{2}$/,
     /^([-w]{1}w{1}[-w]{1}){3}$/,
     /^([-w]{2}w{1}){3}$/,
 
-    // cross win match
+    // cross wining matches
     /^w{1}[-w]{3}w{1}[-w]{3}w{1}$/,
     /^[-w]{2}w{1}[-w]{1}w{1}[-w]{1}w{1}[-w]{2}$/
   ];

@@ -22,9 +22,10 @@ function draw() {
 
     drawPlacement(i, j, aiPlayer);
     isPlayersTurn = true;
-    decideOnGame();
+    setTimeout(decideOnGame,0);
   }
 }
+
 function restart(){
   location.href = '';
 }
@@ -41,7 +42,7 @@ function decideOnGame() {
     restart();
     gameFinished = true;
   }
-  if (isTie(actions)) {
+  if (isATie(actions)) {
     alert('game tied');
     restart();
     gameFinished = true;
@@ -56,7 +57,7 @@ function mouseClicked() {
     if (result === -1) return;// room is full
     drawPlacement(i, j, humanPlayer);
     isPlayersTurn = false;
-    decideOnGame();
+    setTimeout(decideOnGame,0);
   }
 }
 
