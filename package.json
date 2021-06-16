@@ -3,8 +3,20 @@
   "version": "1.0.0",
   "description": "tic tac toe game with minmax algorithm",
   "main": "index.js",
-  "scripts": {},
-  "keywords": ["game","ai","minmax","tic-tac-toe"],
+  "scripts": { 
+    "deploy" : "gh-pages -d ."
+  
+  },
+  "homepage" : "https://SC0d3r.github.io/Tic-Tac-Toe-minimax-",
+  "keywords": [
+    "game",
+    "ai",
+    "minmax",
+    "tic-tac-toe"
+  ],
   "author": "SC0d3r",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "gh-pages": "^3.2.1"
+  }
 }
